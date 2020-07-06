@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect
 from core.models import Evento
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 def login_user(request):
     return render(request, 'login.html')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('/')
 
 
 def submit_login(request):
@@ -16,8 +21,10 @@ def submit_login(request):
         if usuario is not None:
             login(request, usuario)
             return redirect('/')
-    else:
-        return redirect('/')
+        else:
+             messages.error(request, "Usuario ou senha não incorretos")
+
+    return redirect('/')
 
 
 # só acessa se tiver login e redireciona se não for possível
