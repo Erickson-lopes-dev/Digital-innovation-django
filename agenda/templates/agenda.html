@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Listagem - Agenda</title>
+</head>
+<body>
+
+    <h2>Agendamentos</h2>
+
+    <ul style="font-size: 18px">
+        {% for evento in eventos %}
+            <li>{{ evento.titulo }} - {{ evento.get_data_evento}}</li>
+        {% endfor %}
+    </ul>
+
+
+</body>
+</html>
