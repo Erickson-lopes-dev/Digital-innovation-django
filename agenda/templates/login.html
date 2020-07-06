@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda</title>
+</head>
+<body>
+
+
+    <div align="center">
+    <h1>login</h1>
+        <form action="submit" method="POST">{% csrf_token %}
+            <label>Usuario</label>
+            <input type="text" name="username">
+            <label>Senha</label>
+            <input type="text" name="password">
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+</body>
+</html>
