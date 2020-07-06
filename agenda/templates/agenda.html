@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Listagem - Agenda</title>
-</head>
-<body>
+{% extends "model-page.html" %}
+
+{% block content %}
 
     <h2>Agendamentos</h2>
 
@@ -14,6 +10,4 @@
         {% endfor %}
     </ul>
 
-
-</body>
-</html>
+{% endblock %}
