@@ -3,6 +3,8 @@ from core.models import Evento
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from datetime import datetime, timedelta
+from django.http.response import Http404, JsonResponse
 
 
 def login_user(request):
@@ -37,7 +39,11 @@ def lista_eventos(request):
     # retornando lista com todos os registros
     # evento = Evento.objects.all()
     usuario = request.user
-    evento = Evento.objects.filter(usuario=usuario)
+
+    # até 1 hora de atraso ele aparece
+    data_atual = datetime.now() - timedelta(hours=1)
+                                                              #__lt para menor
+    evento = Evento.objects.filter(usuario=usuario, data_evento__gt=data_atual)
     dados = {'eventos': evento}
     return render(request, 'agenda.html', dados)
 
@@ -68,11 +74,21 @@ def submit_evento(request):
         usuario = request.user
         id_evento = request.POST.get('id_evento')
 
+        # update or create
         if id_evento:
+            # evento = Evento.objects.get(id=id_evento)
+            # if evento.usuario == usuario:
+            #     evento.titulo = titulo
+            #     evento.data_evento = data_evento
+            #     evento.descricao = descricao
+            #     evento.local = local
+            #     evento.save()
+
             Evento.objects.filter(id=id_evento).update(titulo=titulo,
                                                        data_evento=data_evento,
                                                        descricao=descricao,
                                                        local=local)
+
         else:
             Evento.objects.create(titulo=titulo,
                                   data_evento=data_evento,
@@ -86,7 +102,25 @@ def submit_evento(request):
 def delete_evento(request, id_evento):
     # evitando que outro usuario delete o registro de outros
     usuario = request.user
-    evento = Evento.objects.get(id=id_evento)
+    try:
+        evento = Evento.objects.get(id=id_evento)
+    except Exception:
+        raise Http404()
+
     if usuario == evento.usuario:
         evento.delete()
+    else:
+        raise Http404()
     return redirect('/')
+
+
+@login_required(login_url='/login/')
+def json_evento(request):
+    usuario = request.user
+
+    # até 1 hora de atraso ele aparece
+    data_atual = datetime.now() - timedelta(hours=1)
+    # __lt para menor
+    evento = Evento.objects.filter(usuario=usuario, data_evento__gt=data_atual)
+    dados = {'eventos': evento}
+    return render(request, 'agenda.html', dados)
