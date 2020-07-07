@@ -117,10 +117,6 @@ def delete_evento(request, id_evento):
 @login_required(login_url='/login/')
 def json_evento(request):
     usuario = request.user
+    evento = Evento.objects.filter(usuario=usuario).values('id', 'titulo')
 
-    # até 1 hora de atraso ele aparece
-    data_atual = datetime.now() - timedelta(hours=1)
-    # __lt para menor
-    evento = Evento.objects.filter(usuario=usuario, data_evento__gt=data_atual)
-    dados = {'eventos': evento}
-    return render(request, 'agenda.html', dados)
+    return JsonResponse(list(evento), safe=False)
