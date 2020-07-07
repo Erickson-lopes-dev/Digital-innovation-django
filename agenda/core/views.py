@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
+
 def login_user(request):
     return render(request, 'login.html')
 
@@ -22,7 +23,7 @@ def submit_login(request):
             login(request, usuario)
             return redirect('/')
         else:
-             messages.error(request, "Usuario ou senha não incorretos")
+            messages.error(request, "Usuario ou senha não incorretos")
 
     return redirect('/')
 
@@ -40,6 +41,7 @@ def lista_eventos(request):
     dados = {'eventos': evento}
     return render(request, 'agenda.html', dados)
 
+
 # import redirect
 # def index(request):
 #     return redirect('/agenda/')
@@ -56,11 +58,22 @@ def submit_evento(request):
         titulo = request.POST.get('titulo')
         data_evento = request.POST.get('data_evento')
         descricao = request.POST.get('descricao')
+        local = request.POST.get('local')
         usuario = request.user
 
         Evento.objects.create(titulo=titulo,
                               data_evento=data_evento,
                               descricao=descricao,
+                              local=local,
                               usuario=usuario)
+    return redirect('/')
 
+
+@login_required(login_url='/login/')
+def delete_evento(request, id_evento):
+    # evitando que outro usuario delete o registro de outros
+    usuario = request.user
+    evento = Evento.objects.get(id=id_evento)
+    if usuario == evento.usuario:
+        evento.delete()
     return redirect('/')
