@@ -26,5 +26,6 @@ urlpatterns = [
     path('login/submit', submit_login),
     path('logout/', logout_user),
     path('agenda/evento/', evento),
+    path('agenda/evento/submit', submit_evento),
     # path('', index),
 ]

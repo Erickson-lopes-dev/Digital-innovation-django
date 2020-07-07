@@ -2,13 +2,32 @@
 
 {% block content %}
 
+
+<div align="center">
+
 <h2>Evento</h2>
 
-<label>Titulo</label>
-<input type="text" name="titulo">
+<form action="submit" method="POST">{% csrf_token %}
 
-<br>
+    <label>Titulo</label>
+    <br>
+    <input type="text" name="titulo" size="23">
+    <br>
+    <label>Data do evento</label>
+    <br>
+    <input type="datetime-local" name="data_evento" size="23">
+    <br>
+    <textarea name="descricao" rows="5" cols="24"></textarea>
+    <br>
 
-<label>Data do evento</label>
-<input type="datetime-local" name="data_evento">
+
+    <button type="submit">Salvar</button>
+    <a href="/">
+        <button type="button">Cancelar</button>
+    </a>
+</form>
+
+
+
+</div>
 {% endblock %}
