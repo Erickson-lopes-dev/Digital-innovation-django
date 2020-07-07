@@ -43,3 +43,8 @@ def lista_eventos(request):
 # import redirect
 # def index(request):
 #     return redirect('/agenda/')
+
+
+@login_required(login_url='/login/')
+def evento(request):
+    return render(request, 'evento.html')
